@@ -1,33 +1,21 @@
 import os
-# from app.prompt import AGENT_PROMPT
 from app.prompt_openspecimen import AGENT_PROMPT
 from app.pdf_ingest import knowledge_base
 
-# from agno.models.groq import Groq as AgentLLM
 from agno.agent import Agent
-from agno.embedder.sentence_transformer import SentenceTransformerEmbedder
-from agno.models.openai import OpenAIChat as AgentLLM
+
+# from agno.models.groq import Groq as AgentLLM
+# from agno.models.openai import OpenAIChat as AgentLLM
+from agno.models.google import Gemini as AgentLLM
+
 from agno.storage.agent.sqlite import SqliteAgentStorage
 
-OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
+LLM_API_KEY = os.environ["LLM_API_KEY"]
 
-transformer = SentenceTransformerEmbedder()
-
-# FIXME: ISSUES
-#   1. Formatting issues
-#   2. Multi-page spanning answers
-#   3. Chunks with linked section information
 
 agent = Agent(
     description=f"You are an expert",
-    model=AgentLLM(
-        # id="gpt-3.5-turbo",
-        id="gpt-4o-mini",
-        api_key=OPENAI_API_KEY,
-        # id="llama-3.3-70b-versatile",
-        # id="deepseek-r1-distill-qwen-32b",
-        # api_key="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",
-    ),
+    model=AgentLLM(api_key=LLM_API_KEY),
     retries=3,
     markdown=True,
     instructions=[
